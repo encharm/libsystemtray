@@ -17,6 +17,15 @@ Future:
 * Mac OSX?
 * Common API for all backends
 
+## Installation
+```
+git clone https://github.com/encharm/libsystemtray.git
+cd libsystemtray && mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+
 ## Example usage for KDE
 
 ### C++11 example
