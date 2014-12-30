@@ -7,6 +7,7 @@ Goals of this library:
 * Allow all of the features of native platform
 * Friendly license, MIT **pull requests are welcome**
 * Can be used and/or bundled in commercial software
+* Ability to copy and paste code from this repo and make stuff work :)
 
 Temporary limitations:
 * KDE at first only. **pull requests are welcome**
