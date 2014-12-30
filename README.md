@@ -4,7 +4,7 @@ Goals of this library:
 * Reduce the complexity of creating system tray icons
 * Have minimal link dependencies
 * Ship both C and C++ API
-* Allow all of the features 
+* Allow all of the features of native platform
 * Friendly license, MIT **pull requests are welcome**
 * Can be used and/or bundled in commercial software
 
