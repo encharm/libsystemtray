@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+*.kdev4
+
+build
+CMakeFiles
+CMakeCache.txt
