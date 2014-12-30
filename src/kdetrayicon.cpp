@@ -14,7 +14,6 @@
 #define ITEM_INTERFACE      "org.kde.StatusNotifierItem"
 
 
-// danger
 static const char* watcherXml =
     "<node>"
     "   <interface name='org.kde.StatusNotifierWatcher'>"
@@ -27,8 +26,6 @@ static const char* watcherXml =
     "   </interface>"
     "</node>";
 
-// danger
-    
 static const char* itemXml = 
 "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"" \
 "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">" \
@@ -132,7 +129,7 @@ class StatusNotifierItem : public DBus::Interface
         int w, h;
         std::vector<uint8_t> bytes;
     };
-    std::string m_id = "DUPA", m_category = "ApplicationStatus", m_title = "DUPA", m_status = "Active", m_iconName, m_overlayIconName, m_attentionIconName, m_attentionMovieName;
+    std::string m_id = "", m_category = "ApplicationStatus", m_title = "Title", m_status = "Active", m_iconName, m_overlayIconName, m_attentionIconName, m_attentionMovieName;
     uint32_t m_windowId = 0;
     Icon m_iconPixmap = {0, 0}, m_overlayIconPixmap = {0, 0}, m_attentionIconPixmap = {0, 0};
     
