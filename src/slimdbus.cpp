@@ -47,6 +47,15 @@ namespace DBus {
             dynamic_c_symbol(message_iter_open_container)
             dynamic_c_symbol(message_iter_append_basic)
             dynamic_c_symbol(message_iter_close_container)
+            dynamic_c_symbol(message_iter_init)
+            dynamic_c_symbol(message_iter_get_arg_type)
+            dynamic_c_symbol(message_iter_next)
+            dynamic_c_symbol(message_iter_get_basic)
+            dynamic_c_symbol(message_iter_recurse)
+            dynamic_c_symbol(message_get_type)
+            dynamic_c_symbol(message_get_sender)
+            dynamic_c_symbol(message_get_destination)
+            dynamic_c_symbol(message_get_error_name)
             dynamic_c_symbol(message_get_args)
             dynamic_c_symbol(bus_request_name)
             dynamic_c_symbol(bus_release_name)
@@ -54,6 +63,11 @@ namespace DBus {
             DBus::initialized = true;
         }
     } initialize;
+        
+    void debug_message(DBusMessage* msg) {
+        // debug code was GPL, TODO: write own debug function
+    }
+    
 };
 
 #undef dynamic_c_symbol
@@ -84,6 +98,15 @@ dynamic_c_symbol(message_new_method_return)
 dynamic_c_symbol(message_iter_open_container)
 dynamic_c_symbol(message_iter_append_basic)
 dynamic_c_symbol(message_iter_close_container)
+dynamic_c_symbol(message_iter_get_arg_type)
+dynamic_c_symbol(message_iter_next)
+dynamic_c_symbol(message_iter_init)
+dynamic_c_symbol(message_iter_get_basic)
+dynamic_c_symbol(message_iter_recurse)
+dynamic_c_symbol(message_get_type)
+dynamic_c_symbol(message_get_sender)
+dynamic_c_symbol(message_get_destination)
+dynamic_c_symbol(message_get_error_name)
 dynamic_c_symbol(message_get_args)
 dynamic_c_symbol(bus_request_name)
 dynamic_c_symbol(bus_release_name)

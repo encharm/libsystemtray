@@ -51,10 +51,21 @@ namespace DBus {
     dynamic_c_symbol(message_iter_open_container)
     dynamic_c_symbol(message_iter_append_basic)
     dynamic_c_symbol(message_iter_close_container)
+    dynamic_c_symbol(message_iter_get_arg_type)
+    dynamic_c_symbol(message_iter_next)
+    dynamic_c_symbol(message_iter_init)
+    dynamic_c_symbol(message_iter_get_basic)
+    dynamic_c_symbol(message_iter_recurse)
+    dynamic_c_symbol(message_get_type)
+    dynamic_c_symbol(message_get_sender)
+    dynamic_c_symbol(message_get_destination)
     dynamic_c_symbol(message_get_args)
+    dynamic_c_symbol(message_get_error_name)
     dynamic_c_symbol(bus_request_name)
     dynamic_c_symbol(bus_release_name)
     dynamic_c_symbol(message_new_method_call)
+    
+    void debug_message(DBusMessage* msg);
     
     template <typename E>
     typename std::underlying_type<E>::type to_underlying(E e) {
@@ -184,7 +195,6 @@ namespace DBus {
             bool readWriteStatus = DBus::connection_read_write(rawPtr, timeout);
             for(DBusDispatchStatus status = DBus::connection_get_dispatch_status(rawPtr);
                 status == DBUS_DISPATCH_DATA_REMAINS; status = DBus::connection_dispatch(rawPtr)) {
-                printf("I/O\n");
             }
             return readWriteStatus;
         }
@@ -217,8 +227,8 @@ namespace DBus {
             connection->send(signal);
         }
         
-        Interface(std::string _path, std::string _interface, std::string xml, Connection::Ptr& _connection) : path(_path), interface(_interface), connection(_connection) {
-            filterHandles.push_back(connection->addFilter(path, interface, [=](DBusMessage* msg) {
+        Interface(std::string _path, std::string _interface, std::string baseXml, std::string xml, Connection::Ptr& _connection) : path(_path), interface(_interface), connection(_connection) {
+            filterHandles.push_back(connection->addFilter(path, interface, [=](DBusMessage* msg) {                
                 auto method = DBus::message_get_member(msg);
                 auto methodIter = methods.find(method);
                 if(methodIter == methods.end()) {
@@ -270,7 +280,7 @@ namespace DBus {
                 DBus::message_iter_close_container(&args, &dict);
 
                 connection->send(message);
-                        
+                                
                 return DBus::HandlerResult::Handled;
             }));
             
@@ -283,6 +293,7 @@ namespace DBus {
                 if(!status) {
                     return DBus::HandlerResult::NotYetHandled;
                 }
+                printf("Get %s %s\n", interfaceGet, property);
                 if(strcmp(interfaceGet, interface.c_str()) != 0) {
                     return DBus::HandlerResult::NotYetHandled;
                 }
@@ -303,17 +314,21 @@ namespace DBus {
                 return DBus::HandlerResult::Handled;
             }));
             
-            filterHandles.push_back(connection->addFilter(path, "org.freedesktop.DBus.Introspectable", "Introspect", [=](DBusMessage* msg) {
-                auto message = DBus::message_new_method_return(msg);
-                DBusMessageIter args;
-                DBus::message_iter_init_append(message, &args);
-                const char* str = xml.c_str();
-                DBus::message_iter_append_basic(&args, DBUS_TYPE_STRING, &str);
-                connection->send(message);
-                
-                return DBus::HandlerResult::Handled;
-            }));
+            auto introspectionFilter = [=](const std::string& path, const std::string& xml) {
+                return connection->addFilter(path, "org.freedesktop.DBus.Introspectable", "Introspect", [=](DBusMessage* msg) {
+                    auto message = DBus::message_new_method_return(msg);
+                    DBusMessageIter args;
+                    DBus::message_iter_init_append(message, &args);
+                    const char* str = xml.c_str();
+                    DBus::message_iter_append_basic(&args, DBUS_TYPE_STRING, &str);
+                    connection->send(message);
+                    
+                    return DBus::HandlerResult::Handled;
+                });
+            };
             
+            filterHandles.push_back(introspectionFilter("/", baseXml));
+            filterHandles.push_back(introspectionFilter(path, xml));
         }
         virtual ~Interface() {
             for(auto& filterHandle: filterHandles) {

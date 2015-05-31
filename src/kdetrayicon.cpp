@@ -27,8 +27,6 @@ static const char* watcherXml =
     "</node>";
 
 static const char* itemXml = 
-"<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"" \
-"\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">" \
 "<node>" \
 "  <interface name=\"org.freedesktop.DBus.Introspectable\">" \
 "    <method name=\"Introspect\">" \
@@ -160,7 +158,6 @@ public:;
         if(registered) {
             emitSignal("NewStatus", [=](DBusMessageIter &args) {
                 const char* str = m_status.c_str();
-                printf("Emit signal %s\n", str);
                 DBus::message_iter_append_basic(&args, DBUS_TYPE_STRING, &str);
             });
         }        
@@ -215,7 +212,7 @@ public:;
     }
     
     StatusNotifierItem(DBus::Connection::Ptr connection)
-    : DBus::Interface("/StatusNotifierItem", "org.kde.StatusNotifierItem", itemXml2, connection)
+    : DBus::Interface("/StatusNotifierItem", "org.kde.StatusNotifierItem", itemXml, itemXml2, connection)
     {
         auto stringHandler = [](std::string& value) {
             return [=,&value] (DBusMessage* msg, DBusMessageIter& iter) {
@@ -284,7 +281,7 @@ public:;
         
         connection->sendWithReply(message, [=](DBusMessage* reply) {            
             static int id = 0;
-            
+
             {
                 static char name_buf[1024];
                 snprintf(name_buf, sizeof(name_buf), "org.kde.StatusNotifierItem-%u-%u", getpid(), id++);
@@ -302,8 +299,7 @@ public:;
                 const char* str = name.c_str();
                 DBus::message_iter_append_basic(&args, DBUS_TYPE_STRING, &str);
             }
-            connection->sendWithReply(message, [=](DBusMessage* reply) {            
-                // TODO check reply
+            connection->sendWithReply(message, [=](DBusMessage* reply) {
                 registered = true;
             });
         });
