@@ -324,6 +324,7 @@ public:
 };
 
 KDETrayIcon::KDETrayIcon(const std::string& id) : d_ptr(new KDETrayIcon::Private) {
+    d_ptr->setId(id);
     d_ptr->addMethod("ContextMenu", [=](DBusMessage* msg, DBusMessageIter& iter) {
         int x, y;
         DBus::Error err;
