@@ -28,6 +28,15 @@ sudo make install
 ```
 
 ## Example usage for KDE
+Note, the examples set icon from name, but you can also use:
+```c++
+KDETrayIcon::setIconPixmap(int w, int h, const uint8_t* data);
+```
+or the equivalent in C API 
+```c++
+void kdetrayicon_set_overlay_icon_pixmap(kdetrayicon* handle, int w, int h, const uint8_t* data);
+```
+The `data` needs to be a in 32-bit RGBA format.
 
 ### C++11 example
 As per `tests/iconbyname.cpp`:
