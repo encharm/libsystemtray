@@ -498,5 +498,5 @@ void kdetrayicon_on_scroll(kdetrayicon* handle, void(*handler)(int, const char*,
 }
 
 bool kdetrayicon_process(kdetrayicon* handle, int timeout) {
-    ((KDETrayIcon*)handle)->process(timeout);
+    return ((KDETrayIcon*)handle)->process(timeout);
 }

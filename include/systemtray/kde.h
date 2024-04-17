@@ -2,6 +2,7 @@
 
 #ifdef __cplusplus
 #include <functional>
+#include <string>
 
 class KDETrayIcon
 {
