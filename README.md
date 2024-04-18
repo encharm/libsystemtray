@@ -19,6 +19,16 @@ Future:
 * Common API for all backends
 
 ## Installation
+Prerequisits:
+
+```
+sudo apt install cmake
+sudo apt install pkgconf
+sudo apt-get install libdbus-1-dev
+```
+
+Building:
+
 ```
 git clone https://github.com/encharm/libsystemtray.git
 cd libsystemtray && mkdir build && cd build
